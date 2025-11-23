@@ -1,10 +1,10 @@
 package view.command;
 
-import controller.Controller;
+import controller.ControllerInterface;
 
 public class RunExampleCommand extends Command {
-    private final Controller ctr;
-    public RunExampleCommand(String key, String desc, Controller ctr){
+    private final ControllerInterface ctr;
+    public RunExampleCommand(String key, String desc, ControllerInterface ctr){
         super(key, desc);
         this.ctr=ctr;
     }
