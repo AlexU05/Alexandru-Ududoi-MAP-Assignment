@@ -24,7 +24,7 @@ public record AssignmentStatement
         }
 
         symbolTable.updateValue(variableName, value);
-        return state;
+        return null;
     }
 
     @Override

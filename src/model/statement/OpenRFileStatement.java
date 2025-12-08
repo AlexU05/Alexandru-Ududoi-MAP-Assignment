@@ -27,7 +27,7 @@ public record OpenRFileStatement(Expression expression) implements Statement {
             throw new RuntimeException(e);
         }
 
-        return state;
+        return null;
     }
 
     @Override

@@ -330,6 +330,50 @@ class Main {
             RepositoryInterface repo11 = new Repository(prg11, "log11.txt");
             ControllerInterface ctr11 = new Controller(repo11);
 
+            // New fork example (option 12)
+            // int v; Ref int a; v=10; new(a,22);
+            // fork(wH(a,30); v=32; print(v); print(rH(a)));
+            // print(v); print(rH(a))
+            Statement forkExample = new CompoundStatement(
+                    new VariableDeclarationStatement(SimpleType.INTEGER, "v"),
+                    new CompoundStatement(
+                            new VariableDeclarationStatement(new ReferenceType(SimpleType.INTEGER), "a"),
+                            new CompoundStatement(
+                                    new AssignmentStatement("v", new ValueExp(new IntegerValue(10))),
+                                    new CompoundStatement(
+                                            new HeapDeclarationStatement("a", new ValueExp(new IntegerValue(22))),
+                                            new CompoundStatement(
+                                                    new ForkStatement(
+                                                            new CompoundStatement(
+                                                                    new HeapWriteStatement("a", new ValueExp(new IntegerValue(30))),
+                                                                    new CompoundStatement(
+                                                                            new AssignmentStatement("v", new ValueExp(new IntegerValue(32))),
+                                                                            new CompoundStatement(
+                                                                                    new PrintStatement(new VarExp("v")),
+                                                                                    new PrintStatement(new HeapReadExp(new VarExp("a")))
+                                                                            )
+                                                                    )
+                                                            )
+                                                    ),
+                                                    new CompoundStatement(
+                                                            new PrintStatement(new VarExp("v")),
+                                                            new PrintStatement(new HeapReadExp(new VarExp("a")))
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
+            );
+            ExecutionStack exeStack12 = new ListExecutionStack();
+            exeStack12.push(forkExample);
+            SymbolTable symTable12 = new MapSymbolTable();
+            Out out12 = new ListOut();
+            FileTable fileTable12 = new MapFileTable();
+            Heap heap12 = new HeapMemory();
+            ProgramState prg12 = new ProgramState(exeStack12, symTable12, out12, fileTable12, heap12);
+            RepositoryInterface repo12 = new Repository(prg12, "log12.txt");
+            ControllerInterface ctr12 = new Controller(repo12);
+
             TextMenu menu = new TextMenu();
             menu.addCommand(new ExitCommand("0", "exit"));
             menu.addCommand(new RunExampleCommand("1", "ex1", ctr1));
@@ -341,8 +385,9 @@ class Main {
             menu.addCommand(new RunExampleCommand("7", "heap ex3: heap read with arithmetic", ctr7));
             menu.addCommand(new RunExampleCommand("8", "heap ex4: heap write", ctr8));
             menu.addCommand(new RunExampleCommand("9", "heap GC example", ctr9));
-            menu.addCommand(new RunExampleCommand("10", "heap GC transitive example", ctr10));
+            menu.addCommand(new RunExampleCommand("10", "heap GC example 2", ctr10));
             menu.addCommand(new RunExampleCommand("11", "while example", ctr11));
+            menu.addCommand(new RunExampleCommand("12", "fork example", ctr12));
             menu.show();
         }
     }

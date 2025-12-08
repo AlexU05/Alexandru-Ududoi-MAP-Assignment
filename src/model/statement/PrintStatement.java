@@ -11,7 +11,7 @@ public record PrintStatement(Expression expression) implements Statement {
         Value value = expression.evaluate(state.symbolTable(), state.heap());
         state.out().append(value);
 
-        return state;
+        return null;
     }
 
     @Override

@@ -12,7 +12,7 @@ public record CompoundStatement
         executionStack.push(second);
         executionStack.push(first);
 
-        return state;
+        return null;
     }
     @Override
     public Statement deepCopy() {

@@ -8,7 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapSymbolTable implements SymbolTable {
-    private final Map<String, Value> symbolTable = new HashMap<>();
+    private final Map<String, Value> symbolTable;
+
+    public MapSymbolTable() {
+        this.symbolTable = new HashMap<>();
+    }
+
+    public MapSymbolTable(Map<String, Value> initial) {
+        this.symbolTable = new HashMap<>(initial);
+    }
 
     @Override
     public boolean isDefined(String variableName) {
@@ -38,6 +46,11 @@ public class MapSymbolTable implements SymbolTable {
     @Override
     public Map<String, Value> getContent() {
         return new HashMap<>(symbolTable);
+    }
+
+    @Override
+    public SymbolTable deepCopy() {
+        return new MapSymbolTable(this.getContent());
     }
 
     @Override

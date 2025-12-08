@@ -41,7 +41,7 @@ public record HeapDeclarationStatement(String variableName, Expression expressio
         ReferenceValue newRefValue = new ReferenceValue(address, locationType);
         symbolTable.updateValue(variableName, newRefValue);
 
-        return state;
+        return null;
     }
 
     @Override
@@ -49,4 +49,3 @@ public record HeapDeclarationStatement(String variableName, Expression expressio
         return new HeapDeclarationStatement(variableName, expression.deepCopy());
     }
 }
-

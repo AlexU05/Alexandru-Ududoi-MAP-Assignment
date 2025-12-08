@@ -3,9 +3,10 @@ package repository;
 import state.ProgramState;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface RepositoryInterface {
-    void setProgramState(ProgramState state);
-    ProgramState getProgramState();
-    void logProgramState() throws IOException;
+    List<ProgramState> getPrgList();
+    void setPrgList(List<ProgramState> programStates);
+    void logPrgStateExec(ProgramState programState) throws IOException;
 }

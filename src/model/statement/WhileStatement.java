@@ -20,7 +20,7 @@ public record WhileStatement(Expression condition, Statement body) implements St
             state.executionStack().push(body);
         }
 
-        return state;
+        return null;
     }
 
     @Override
@@ -28,4 +28,3 @@ public record WhileStatement(Expression condition, Statement body) implements St
         return new WhileStatement(condition.deepCopy(), body.deepCopy());
     }
 }
-

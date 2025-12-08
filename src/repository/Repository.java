@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Repository implements RepositoryInterface {
-    private final List<ProgramState> programStates;
+    private List<ProgramState> programStates;
     private final String logFilePath;
     public Repository(ProgramState programState) {
         this.programStates = new ArrayList<>();
@@ -26,21 +26,21 @@ public class Repository implements RepositoryInterface {
     }
 
     @Override
-    public void setProgramState(ProgramState state) {
-        this.programStates.set(0, state);
+    public List<ProgramState> getPrgList() {
+        return programStates;
     }
 
     @Override
-    public ProgramState getProgramState() {
-        return programStates.get(0);
+    public void setPrgList(List<ProgramState> programStates) {
+        this.programStates = programStates;
     }
 
     @Override
-    public void logProgramState() throws IOException {
+    public void logPrgStateExec(ProgramState programState) throws IOException {
         PrintWriter printWriter = new PrintWriter(
                 new BufferedWriter(
                         new FileWriter(logFilePath, true)));
-        printWriter.println(getProgramState().toString());
+        printWriter.println(programState.toString());
         printWriter.close();
     }
 }

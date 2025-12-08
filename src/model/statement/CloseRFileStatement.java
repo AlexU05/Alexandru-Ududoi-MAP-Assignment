@@ -13,7 +13,7 @@ public record CloseRFileStatement(Expression expression) implements Statement {
             throw new FileNotOpenException(fileName);
         }
         state.fileTable().close(fileName);
-        return state;
+        return null;
     }
 
     @Override
