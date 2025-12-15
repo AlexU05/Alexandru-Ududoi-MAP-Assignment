@@ -1,10 +1,9 @@
 package model.adt;
 
-import model.value.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Dictionary<K extends Value, V extends Value> implements ADT<V> {
+public class Dictionary<K, V> implements ADT<V> {
     private final Map<K, V> map = new HashMap<>();
 
     public void put(K key, V value) {

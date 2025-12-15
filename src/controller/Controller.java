@@ -70,10 +70,10 @@ public class Controller implements ControllerInterface {
 
     @Override
     public void allStep() {
-        executor = Executors.newFixedThreadPool(2);
         List<ProgramState> prgList = removeCompletedPrg(repositoryInterface.getPrgList());
+        executor = Executors.newFixedThreadPool(2);
 
-        while (prgList.size() > 0) {
+        while (!prgList.isEmpty()) {
             oneStepForAllPrg(prgList);
 
             try {

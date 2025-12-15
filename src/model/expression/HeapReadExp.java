@@ -2,10 +2,14 @@ package model.expression;
 
 import model.exception.InvalidTypeException;
 import model.exception.RuntimeInterpreterException;
+import model.exception.TypeCheckException;
+import model.type.ReferenceType;
+import model.type.Type;
 import model.value.ReferenceValue;
 import model.value.Value;
 import state.SymbolTable;
 import state.Heap;
+import model.adt.Dictionary;
 
 public record HeapReadExp(Expression expression) implements Expression {
 
@@ -35,5 +39,12 @@ public record HeapReadExp(Expression expression) implements Expression {
     public Expression deepCopy() {
         return new HeapReadExp(expression.deepCopy());
     }
-}
 
+    @Override
+    public Type typecheck(Dictionary<String, Type> typeEnv) throws TypeCheckException {
+        Type t = expression.typecheck(typeEnv);
+        if (!(t instanceof ReferenceType ref))
+            throw new TypeCheckException("the rH argument is not a Ref Type");
+        return ref.getInner();
+    }
+}

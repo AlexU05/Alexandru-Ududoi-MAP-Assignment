@@ -1,11 +1,14 @@
 package model.statement;
 
 import model.exception.InvalidAssignmentException;
+import model.exception.TypeCheckException;
 import model.exception.VariableNotDefinedException;
 import model.expression.Expression;
 import model.value.Value;
 import state.ProgramState;
 import state.SymbolTable;
+import model.adt.Dictionary;
+import model.type.Type;
 
 public record AssignmentStatement
         (String variableName, Expression expression) implements Statement {
@@ -30,5 +33,16 @@ public record AssignmentStatement
     @Override
     public Statement deepCopy() {
         return new AssignmentStatement(variableName, expression.deepCopy());
+    }
+
+    @Override
+    public Dictionary<String, Type> typecheck(Dictionary<String, Type> typeEnv) throws TypeCheckException {
+        if (!typeEnv.containsKey(variableName))
+            throw new TypeCheckException("Variable %s not declared".formatted(variableName));
+        var typeVar = typeEnv.get(variableName);
+        var typeExp = expression.typecheck(typeEnv);
+        if (!typeVar.equals(typeExp))
+            throw new TypeCheckException("Assignment: right hand side and left hand side have different types");
+        return typeEnv;
     }
 }

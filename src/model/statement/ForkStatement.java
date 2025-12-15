@@ -1,9 +1,12 @@
 package model.statement;
 
+import model.exception.TypeCheckException;
 import state.ExecutionStack;
 import state.ListExecutionStack;
 import state.ProgramState;
 import state.SymbolTable;
+import model.adt.Dictionary;
+import model.type.Type;
 
 public record ForkStatement(Statement statement) implements Statement {
 
@@ -29,5 +32,10 @@ public record ForkStatement(Statement statement) implements Statement {
     public Statement deepCopy() {
         return new ForkStatement(statement.deepCopy());
     }
-}
 
+    @Override
+    public Dictionary<String, Type> typecheck(Dictionary<String, Type> typeEnv) throws TypeCheckException {
+        statement.typecheck((Dictionary<String, Type>) typeEnv.copy());
+        return typeEnv;
+    }
+}

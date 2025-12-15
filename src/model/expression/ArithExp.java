@@ -3,10 +3,14 @@ package model.expression;
 import model.exception.DivisionByZeroException;
 import model.exception.InvalidOperatorException;
 import model.exception.RuntimeInterpreterException;
+import model.exception.TypeCheckException;
+import model.type.SimpleType;
+import model.type.Type;
 import model.value.Value;
 import state.SymbolTable;
 import state.Heap;
 import model.value.IntegerValue;
+import model.adt.Dictionary;
 
 public record ArithExp(Expression left, Expression right, String operator) implements Expression{
     @Override
@@ -51,5 +55,16 @@ public record ArithExp(Expression left, Expression right, String operator) imple
     @Override
     public Expression deepCopy() {
         return new ArithExp(left.deepCopy(), right.deepCopy(), operator);
+    }
+
+    @Override
+    public Type typecheck(Dictionary<String, Type> typeEnv) throws TypeCheckException {
+        Type t1 = left.typecheck(typeEnv);
+        Type t2 = right.typecheck(typeEnv);
+        if (!t1.equals(SimpleType.INTEGER))
+            throw new TypeCheckException("First operand is not an integer");
+        if (!t2.equals(SimpleType.INTEGER))
+            throw new TypeCheckException("Second operand is not an integer");
+        return SimpleType.INTEGER;
     }
 }

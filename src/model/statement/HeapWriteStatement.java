@@ -2,6 +2,7 @@ package model.statement;
 
 import model.exception.InvalidTypeException;
 import model.exception.RuntimeInterpreterException;
+import model.exception.TypeCheckException;
 import model.exception.VariableNotDefinedException;
 import model.expression.Expression;
 import model.type.ReferenceType;
@@ -10,6 +11,8 @@ import model.value.Value;
 import state.ProgramState;
 import state.SymbolTable;
 import state.Heap;
+import model.adt.Dictionary;
+import model.type.Type;
 
 public record HeapWriteStatement(String variableName, Expression expression) implements Statement {
 
@@ -55,5 +58,19 @@ public record HeapWriteStatement(String variableName, Expression expression) imp
     @Override
     public Statement deepCopy() {
         return new HeapWriteStatement(variableName, expression.deepCopy());
+    }
+
+    @Override
+    public Dictionary<String, Type> typecheck(Dictionary<String, Type> typeEnv) throws TypeCheckException {
+        if (!typeEnv.containsKey(variableName))
+            throw new TypeCheckException("Variable %s not declared".formatted(variableName));
+        var varType = typeEnv.get(variableName);
+        if (!(varType instanceof ReferenceType))
+            throw new TypeCheckException("Variable is not a Ref type");
+        var expType = expression.typecheck(typeEnv);
+        var ref = (ReferenceType) varType;
+        if (!ref.getInner().equals(expType))
+            throw new TypeCheckException("wH stmt: right hand side and left hand side have different types");
+        return typeEnv;
     }
 }
