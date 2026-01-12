@@ -111,4 +111,37 @@ public class Controller implements ControllerInterface {
     public boolean getDisplayFlag() {
         return displayFlag;
     }
+
+    @Override
+    public void oneStep() {
+        repositoryInterface.setPrgList(removeCompletedPrg(repositoryInterface.getPrgList()));
+        List<ProgramState> prgList = repositoryInterface.getPrgList();
+        if (prgList.isEmpty()) {
+            // throw new InterpreterException("All programs have completed execution.");
+            // ^ if you want to not erase everything accidentally with one extra click uncomment this
+            return;
+        }
+        executor = Executors.newFixedThreadPool(2);
+        oneStepForAllPrg(prgList);
+        try {
+            var allSymValues = repositoryInterface.getPrgList().stream()
+                    .flatMap(p -> p.symbolTable().getContent().values().stream())
+                    .collect(Collectors.toList());
+
+            var heapContent = repositoryInterface.getPrgList().get(0).heap().getContent();
+            var newHeap = GarbageCollector.safeGarbageCollector(allSymValues, heapContent);
+
+            repositoryInterface.getPrgList().forEach(p -> p.heap().setContent(newHeap));
+        } catch (Exception e) {
+            throw new InterpreterException(e.toString());
+        }
+
+
+        executor.shutdownNow();
+    }
+
+    @Override
+    public List<ProgramState> getProgramStates() {
+        return repositoryInterface.getPrgList();
+    }
 }

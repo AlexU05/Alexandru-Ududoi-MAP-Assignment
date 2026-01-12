@@ -18,4 +18,9 @@ public class ListOut implements Out{
     public String toString() {
         return "Out: " + values.toString();
     }
+
+    @Override
+    public List<Value> getAll() {
+        return new ArrayList<>(values);
+    }
 }
